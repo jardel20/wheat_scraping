@@ -1,0 +1,119 @@
+
+```{r limpar memória}
+rm(list = ls())
+```
+
+# Criando e manipuland data.frames ####
+```{r}
+elei1 <- data.frame(codRespondente = c(1:10),
+			  Q1 = c("otimo", "mau", "bem", "ruim", "mau", "bem", "otimo",
+			  	 "bem", "mau", "bem"),
+			  Q2 = c(16, 30, 25, 40, 18, 26, 35, 50, 17, 60),
+			  Q3 = c('candidato1', 'candidato2', 'candidato1', 'candidato1',
+			  	 'candidato3', 'candidato2', 'candidato3', 'candidato2',
+			  	 'candidato2', 'candidato2'))
+
+elei1_cand1 <- elei1[elei1$Q3 == "candidato1", ]
+
+elei1$Q4 <- cut(elei1$Q2, breaks = c(16, 20, 30, 60),
+		    labels = c("16-20 anos", "21-30 anos", "31 ou mais"),
+		    include.lowest = T, right = T)
+
+elei2 <- data.frame(codrespondente = c(11:20),
+			  Q1 = c("bem", "mau", "mau", "ruim", "mau", "bem", "otimo",
+			  	 "bem", "mau", "bem"),
+			  Q2 = c(17, 24, 25, 45, 18, 28, 35, 62, 17, 60),
+			  Q3 = c('candidato1', 'candidato2', 'candidato1', 'candidato1',
+			  	 'candidato2', 'candidato2', 'candidato3', 'candidato2',
+			  	 'candidato2', 'candidato1'))
+```
+
+```{r}
+#elei1$Q4 <- NULL
+#elei <- rbind(elei1, elei2) # retorna erro pq n tem colunas em comum
+```
+
+```{r}
+names(elei1)
+names(elei2)[1] <- "codRespondente" # concerta essa coluna 1
+elei1$idSurvey <- 1 # cria id 1 para a coluna idSurvey para elei1
+elei2$idSurvey <- 2 # cria id 2 para a coluna idSurvey para elei2
+elei <- rbind(elei1, elei2) # junt afinalmente os data frame 
+```
+
+```{r}
+inforCand <- data.frame(nomeCand = c("candidato1", "candidato2", "candidato3", "candidato4"),
+				idadeCand = c(35, 45, 50, 37),
+				sexoCand = c("F", "M", "M", "F"))
+```
+
+```{r merge data.frames}
+eleiFull <- merge(elei, inforCand, by.x = "Q3", by.y = "nomeCand", all.x = T) # junta duas tabelas 
+# merge () mescla dois data.frames por colunas ou nomes de linhas comuns ou faça outras 
+# versões de operações de junção de banco de dados.
+```
+
+```{r}
+resultado <- data.frame(candidato = c("Candidato1", "Candidato1", "Candidato1",
+						  "Candidato2", "Candidato2", "Candidato2",
+						  "Candidato3", "Candidato3", "Candidato3",
+						  "Candidato4", "Candidato4", "Candidato4"),
+				municipio = c("rio doce", "amazonas", "paraiba",
+						  "rio doce", "amazonas", "paraiba",
+						  "rio doce", "amazonas", "paraiba",
+						  "rio doce", "amazonas", "paraiba"),
+				total_votos = c(1530, 2700, 1125,
+						    1245, 3100, 943,
+						    1543, 720, 532,
+						    703, 400, 800))
+```
+
+# Scraping
+
+```{r limpar memória}
+rm(list = ls())
+```
+
+##  Busca e e faz Downloads de PDFs em um site 
+
+```{r message=FALSE}
+library(tidyverse)
+library(rvest)
+library(stringr)
+```
+
+```{r}
+page <- rvest::read_html("https://www.github.com/rstudio/cheatsheets")
+```
+
+- `html_nodes("a")`: encontra todos os links na página  
+- `html_attr("href")`: pega a url desses links  
+- `str_subset("\\.pdf")`: encontre apenas aqueles que terminam em pdf  
+- `str_c("https://www.github.com", .)`: anexar o site à url  
+- `map(read_html)`: pegue a lista de urls gerada anteriormente e leia-a  
+- `map(html_node, "#raw-url")`: analisa a url 'raw' - o link para o botão de download  
+- `map(html_attr, "href")`: retorna o conjunto de urls brutas para os botões de download  
+- `str_c("https://www.github.com", .)`: prefixe o site novamente para obter um URL completo  
+- `walk2(., basename(.), download.file, mode = "wb")`: use purrr para baixar o pdf associado a cada url para o diretório de trabalho atual
+
+```{r eval=FALSE, include=FALSE}
+raw_list <- page %>%
+  html_nodes("a") %>%
+  html_attr("href") %>%
+  str_subset("\\.pdf") %>%
+  str_c("https://www.github.com", .) %>%
+  map(read_html) %>%
+  map(html_node, "#raw-url") %>%
+  map(html_attr, "href") %>%
+  str_c("https://www.github.com", .) %>%
+  walk2(., basename(.), download.file, mode = "wb")
+```
+
+# Referências
+
+<https://electionsbr.com/livro/bases.html>
+<https://estatidados.com.br/introducao-a-web-scraping-com-r/>
+<http://www.estatisticacomr.uff.br/?p=869>
+<https://towardsdatascience.com/scraping-downloading-and-storing-pdfs-in-r-367a0a6d9199>
+<https://slcladal.github.io/webcrawling.html>
+
