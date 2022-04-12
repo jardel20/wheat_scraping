@@ -36,3 +36,4 @@ Por fim, um script executa em command line (CLI) ou com janelas gráficas um mod
 * Scraping, Downloading, and Storing PDFs in R: [Por Samuel Workman](https://towardsdatascience.com/scraping-downloading-and-storing-pdfs-in-r-367a0a6d9199)  
 * Web Crawling and Scraping using R: [Por Martin Schweinberger](https://slcladal.github.io/webcrawling.html)  
 * Adding Images to Markdown Pages: [Por Marinegeo](https://marinegeo.github.io/2018-08-10-adding-images-markdown/)
+* HTML `<img>` Tag: [Por w3schools](https://www.w3schools.com/tags/tag_img.asp)
