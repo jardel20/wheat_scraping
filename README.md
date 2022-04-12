@@ -37,3 +37,5 @@ Por fim, um script executa em command line (CLI) ou com janelas gráficas um mod
 * Adding Images to Markdown Pages: [Por Marinegeo](https://marinegeo.github.io/2018-08-10-adding-images-markdown/)
 * HTML `<img>` Tag: [Por w3schools](https://www.w3schools.com/tags/tag_img.asp)
 * Web Scraping in R: rvest Tutorial: [Por Datacamp](https://www.datacamp.com/community/tutorials/r-web-scraping-rvest)
+* Bar Progress: [Por github.com/r-lib/progress](https://github.com/r-lib/progress)
+* Barra de progresso em R: [Por r-coder.com/progress-bar-r/](https://r-coder.com/progress-bar-r/)
