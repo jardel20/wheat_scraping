@@ -13,15 +13,14 @@ Como principal pacote para essa tarefa, usamos o `{rvest}`[^3]. <img src="https:
 
 ![fluxograma](https://github.com/jardel20/wheat_scraping/blob/main/images/Apresenta%C3%A7%C3%A3o%20sem%20t%C3%ADtulo.png?raw=true)
 
-Em módulos (scripts .r), cada revista recebe um código personalizado para extração dos dados de interesse. Para tal, é preciso filtrar no site da revista por "wheat" para facilitar as buscas com os códigos.
+Em módulos (scripts.r), cada revista recebe um código personalizado para extração dos dados de interesse. Para tal, é preciso filtrar no site da revista por "wheat" para facilitar as buscas com os códigos.
 
-* Bases/sites usados:
-	+ Springer <img src="https://github.com/jardel20/wheat_scraping/blob/main/images/springer_icon.png" alt="springer_icon" height="30px" width="30px" style="vertical-align:middle"/>
-		- Euphytica: <https://link.springer.com/search?query=wheat&search-within=Journal&facet-journal-id=10681>
-		- outra revista
-	+ Scopus
-	+ Wiley
-	+ SciELO
+Bases de revistas/sites usados:  
+	* Springer <img src="https://github.com/jardel20/wheat_scraping/blob/main/images/springer_icon.png" alt="springer_icon" height="30px" width="30px" style="vertical-align:middle"/>
+		+ Euphytica: <https://link.springer.com/search?query=wheat&search-within=Journal&facet-journal-id=10681>
+	* Scopus
+	* Wiley
+	* SciELO
 
 Por fim, um script executa em command line (CLI) ou com janelas gráficas um modo interativo para controlar os módulos. A lingágem a ser usada pode ser **Shell Script**[^4] ou outra lingúagem mais universal, como **Python**[^5].
 
