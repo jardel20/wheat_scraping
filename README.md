@@ -29,10 +29,11 @@ Por fim, um script executa em command line (CLI) ou com janelas gráficas um mod
 
 ## Material de apoio
 
-* Usando R - Um Guia para Cientistas Políticos: [Por Fernando Meireles - fmeireles@ufmg.br e Denisson Silva - denissonsilva@ufmg.br](https://electionsbr.com/livro/bases.html)  
+* Usando R: Um Guia para Cientistas Políticos: [Por Fernando Meireles - fmeireles@ufmg.br e Denisson Silva - denissonsilva@ufmg.br](https://electionsbr.com/livro/bases.html)  
 * Introdução a Web Scraping com R: [Por Jodavid Ferreira ](https://estatidados.com.br/introducao-a-web-scraping-com-r/)  
 * Estatística é com R!: [Por Prof. Dr. Steven Dutt Ross](http://www.estatisticacomr.uff.br/?p=869)  
 * Scraping, Downloading, and Storing PDFs in R: [Por Samuel Workman](https://towardsdatascience.com/scraping-downloading-and-storing-pdfs-in-r-367a0a6d9199)  
 * Web Crawling and Scraping using R: [Por Martin Schweinberger](https://slcladal.github.io/webcrawling.html)  
 * Adding Images to Markdown Pages: [Por Marinegeo](https://marinegeo.github.io/2018-08-10-adding-images-markdown/)
 * HTML `<img>` Tag: [Por w3schools](https://www.w3schools.com/tags/tag_img.asp)
+* Web Scraping in R: rvest Tutorial: [Por Datacamp](https://www.datacamp.com/community/tutorials/r-web-scraping-rvest)
