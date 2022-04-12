@@ -33,5 +33,3 @@ Por fim, um script executa em command line (CLI) ou com janelas gráficas um mod
 * Estatística é com R! : [Por Prof. Dr. Steven Dutt Ross](http://www.estatisticacomr.uff.br/?p=869)  
 * Scraping, Downloading, and Storing PDFs in R: [Por Samuel Workman](https://towardsdatascience.com/scraping-downloading-and-storing-pdfs-in-r-367a0a6d9199)  
 * Web Crawling and Scraping using R: [Por Martin Schweinberger](https://slcladal.github.io/webcrawling.html)  
-
-## Referências
