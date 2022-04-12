@@ -11,6 +11,8 @@ Como principal pacote para essa tarefa, usamos o `{rvest}`[^3].
 
 ## Como é extruturado
 
+![fluxograma](https://github.com/jardel20/wheat_scraping/blob/main/images/Apresenta%C3%A7%C3%A3o%20sem%20t%C3%ADtulo.png?raw=true)
+
 Em módulos (scripts .r), cada revista recebe um código personalizado para extração dos dados de interesse. Para tal, é preciso filtrar no site da revista por "wheat" para facilitar as buscas com os códigos.
 
 * Bases/sites usados:
