@@ -27,7 +27,7 @@ Por fim, um script executa em command line (CLI) ou com janelas gráficas um mod
 [^4]: https://www.wikiwand.com/pt/Shell_script
 [^5]: https://www.python.org/
 
-# Erros passíveis de ocorrerem
+## Erros passíveis de ocorrerem
 
 Com base no escopo do script e nos testes de desenvolvimento, nessa sessão, estamos incluindo informações dos erros passíveis de ocorrerem.
 
