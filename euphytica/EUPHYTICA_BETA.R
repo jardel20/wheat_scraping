@@ -14,7 +14,8 @@ if (!require(progress)) utils::install.packages("progress")
 library(progress)
 if (!require(beepr)) utils::install.packages("beepr")
 library(beepr)
-
+if (!require(tcltk)) utils::install.packages("tcltk")
+library(tcltk)
 ################################################################################
 
 next_link <- "https://link.springer.com/search?query=wheat&search-within=Journal&facet-journal-id=10681"
@@ -25,12 +26,11 @@ num_pag <- rvest::read_html(next_link) %>%
 	rvest::html_text() %>% 
 	base::as.integer() 
 
-pb <- progress_bar$new(format = ":current/:total [:bar] (:percent)", 
-			     total = 3,
-			     complete = "#",
-			     incomplete = ".",
-			     current = "#",
-			     clear = FALSE)
+pb <- tkProgressBar(title = "Wheat Scraping - Euphytica",
+			  label = "Running... Please, wait...",
+			  min = 0,
+			  max = 3,
+			  initial = 0)
 
 df2 <- base::data.frame()
 
@@ -58,12 +58,8 @@ get_download_link <- function(name_link) {
 
 ################################################################################
 
-print("")
-
 for (pages in 1:3) { 
-	
-	pb$tick()
-	
+
 	euphytica <- rvest::read_html(x = next_link, encoding = "UTF-8")
 	
 	# step1 (at articles)
@@ -103,6 +99,11 @@ for (pages in 1:3) {
 		base::paste0("https://link.springer.com", .)
 	
 	next_link <- next_link[1] # coleta apenas um dos links duplicados da proxima pagina
+
+	pctg <- paste(round(pages/3 *100, 0), "% completed")
+	setTkProgressBar(pb, pages, label = pctg)
 }
 
-beep("facebook") # Random notification
+beep("facebook")
+Sys.sleep(1)
+close(pb)
