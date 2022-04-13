@@ -29,6 +29,8 @@ Por fim, um script executa em command line (CLI) ou com janelas gráficas um mod
 
 # Erros passíveis de ocorrerem
 
+Com base no escopo do script e nos testes de desenvolvimento, nessa sessão, estamos incluindo informações dos erros passíveis de ocorrerem.
+
 * **Timeout**[^6]: Acontece quando um servidor tenta carregar uma página web, mas não tem resposta de outro servidor que precisa acessar para completar o carregamento da página. Existem diversas possibilidades para o erro, como lentidão na comunicação, indisponibilidade do proxy ou da CDN etc. Algumas das mensagens comuns sobre esse tipo de falha são:  
 
 	+ 504 Gateway Timeout;
