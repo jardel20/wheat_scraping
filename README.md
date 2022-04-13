@@ -27,7 +27,19 @@ Por fim, um script executa em command line (CLI) ou com janelas gráficas um mod
 [^4]: https://www.wikiwand.com/pt/Shell_script
 [^5]: https://www.python.org/
 
-## Material de apoio
+# Erros passíveis de ocorrerem
+
+* **Timeout**[^6]: Acontece quando um servidor tenta carregar uma página web, mas não tem resposta de outro servidor que precisa acessar para completar o carregamento da página. Existem diversas possibilidades para o erro, como lentidão na comunicação, indisponibilidade do proxy ou da CDN etc. Algumas das mensagens comuns sobre esse tipo de falha são:  
+
+	+ 504 Gateway Timeout;
+	+ HTTP 504;
+	+ 504 Error;
+	+ Gateway Timeout (504);
+	+ HTTP Error 504 — Gateway Timeout.
+
+[^6]: https://rockcontent.com/br/blog/504-gateway-timeout/
+
+## Materiais de apoio
 
 * Usando R: Um Guia para Cientistas Políticos: [Por Fernando Meireles - fmeireles@ufmg.br e Denisson Silva - denissonsilva@ufmg.br](https://electionsbr.com/livro/bases.html)  
 * Introdução a Web Scraping com R: [Por Jodavid Ferreira ](https://estatidados.com.br/introducao-a-web-scraping-com-r/)  
@@ -39,3 +51,4 @@ Por fim, um script executa em command line (CLI) ou com janelas gráficas um mod
 * Web Scraping in R: rvest Tutorial: [Por Datacamp](https://www.datacamp.com/community/tutorials/r-web-scraping-rvest)
 * Bar Progress: [Por github.com/r-lib/progress](https://github.com/r-lib/progress)
 * Barra de progresso em R: [Por r-coder.com/progress-bar-r/](https://r-coder.com/progress-bar-r/)
+* Códigos de status de respostas HTTP: [https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Status](https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Status)
