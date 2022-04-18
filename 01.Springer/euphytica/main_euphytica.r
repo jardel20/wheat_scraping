@@ -31,13 +31,13 @@ num_pag <- rvest::read_html(next_link) %>% # converter um site em um objeto XML
 
 #create the progress bar
 pb <- progress_bar$new(format = ":current/:total [:bar] (:percent)", 
-                       total = num_pag,
+                       total = 5,
                        complete = "#",
                        incomplete = ".",
                        current = "#",
                        clear = FALSE)
 
-df2 <- base::data.frame() #define a clean dataframe
+df1 <- base::data.frame() #define a clean dataframe
 ################################################################################
 
 # functions ####
@@ -55,7 +55,7 @@ get_download_link <- function(name_link) { # funcao pra coletar os XML de cada a
 
 # get informations ####
 
-for (pages in 1:num_pag) { # loop para coletar informacoes de todas as paginas
+for (pages in 1:5) { # loop para coletar informacoes de todas as paginas
   
   pb$tick()
   
@@ -81,8 +81,7 @@ for (pages in 1:num_pag) { # loop para coletar informacoes de todas as paginas
   
   #step2 (in articles)
   #collects the information from within each article using the get_download_link function
-  
-  # PASSÍVEL DE ERRO DE TIMEOUT
+
   download_articles <- base::sapply(name_url, 
                                     FUN = get_download_link, 
                                     USE.NAMES = F)
@@ -109,5 +108,6 @@ utils::write.csv2(x = df2, file = "/home/jardel/MEGA/scripts-pessoais/RScripts/w
 base::saveRDS(object = df2, file = "/home/jardel/MEGA/scripts-pessoais/RScripts/wheat_scraping/euphytica/euphytica_dataset.RData")
 
 base::print("Concluído!")
+base::Sys.sleep(1)
 beepr::beep("facebook")
 
