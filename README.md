@@ -39,6 +39,7 @@ Com base no escopo do script e nos testes de desenvolvimento, nessa sessão, est
 	+ Gateway Timeout (504);
 	+ HTTP Error 504 — Gateway Timeout.
 * **Conexão fechada pela outra ponta**: A conexão é fechada pelo site da revista em questão, impedindo que a extração de dados continue por parte do script.
+* **Erro por conexão de internete fraca**: *"Error in open.connection(x, "rb"): Failed to connect to link.springer.com port 443 after 9033 ms: Não há rota para o host".* Esse erro ocorre na função `rvest::read_html()`.
 
 [^6]: https://rockcontent.com/br/blog/504-gateway-timeout/
 
