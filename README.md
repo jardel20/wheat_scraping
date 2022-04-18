@@ -38,6 +38,7 @@ Com base no escopo do script e nos testes de desenvolvimento, nessa sessão, est
 	+ 504 Error;
 	+ Gateway Timeout (504);
 	+ HTTP Error 504 — Gateway Timeout.
+* **Conexão fechada pela outra ponta**: A conexão é fechada pelo site da revista em questão, impedindo que a extração de dados continue por parte do script.
 
 [^6]: https://rockcontent.com/br/blog/504-gateway-timeout/
 
