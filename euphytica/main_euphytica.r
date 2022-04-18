@@ -5,46 +5,31 @@
 ####### Project: Web Scraping           #######
 ###############################################
 
-Sys.setenv("http_proxy"="")
-Sys.setenv("no_proxy"=TRUE)
-Sys.setenv("no_proxy"=1)
+base::print("Rodando...") #indicates that the script has started
 
-base::print("Rodando...") # indica que o script comecou
-base::rm(list = base::ls()) # limpa as variaveis de ambiente
+base::Sys.setenv("http_proxy"="")
+base::Sys.setenv("no_proxy"=TRUE)
+base::Sys.setenv("no_proxy"=1) #prevent proxy problems
+
+base::rm(list = base::ls()) #clear environment variables
 
 # installing and loading packages if necessary ####
-if (!require(dplyr)){ 
-  utils::install.packages("dplyr") # se nao carregar, instale e carregue
-  library(dplyr)
-}
-if (!require(rvest)){
-  utils::install.packages("rvest")
-  library(rvest)
-}
-if (!require(progress)){
-  utils::install.packages("progress")
-  library(progress)
-}
-if (!require(beepr)) {
-  utils::install.packages("beepr")
-  library(beepr)
-}
-if (!require(tcltk)) {
-  utils::install.packages("tcltk")
-  library(tcltk)
-}
+if (!base::require(pacman)) utils::install.packages("pacman") #if it doesn't load, install and load
+base::library(pacman)
+
+pacman::p_load(dplyr, rvest, progress, beepr, tcltk)
 ################################################################################
 
-# link principal ####
+# main link ####
 next_link <- "https://link.springer.com/search?query=wheat&search-within=Journal&facet-journal-id=10681"
 
-#num_pag guarda o numero de paginas que existem no site
+#num_pag saves the number of pages that exist on the site
 num_pag <- rvest::read_html(next_link) %>% # converter um site em um objeto XML
   rvest::html_nodes(".functions-bar-top .number-of-pages") %>% # extrair os nos relevantes do objeto XML
   rvest::html_text() %>% # extrair os dados marcados
   base::as.integer() # transforma o "character" para "integer"
 
-#cria a barra de progresso
+#create the progress bar
 pb <- progress_bar$new(format = ":current/:total [:bar] (:percent)", 
                        total = num_pag,
                        complete = "#",
@@ -52,28 +37,20 @@ pb <- progress_bar$new(format = ":current/:total [:bar] (:percent)",
                        current = "#",
                        clear = FALSE)
 
-#pb <- tkProgressBar(title = "Wheat Scraping - Euphytica",
-#                    label = "Running...",
-#                    min = 0,
-#                    max = num_pag,
-#                    initial = 0,
-#                    width = 300)
-
-# dataframe para acumular e guardar futuros resultados do loop for
-df2 <- base::data.frame()
+df2 <- base::data.frame() #define a clean dataframe
 ################################################################################
 
 # functions ####
 
-#obtem os links de downaload dos artigos
+#get the article download links
 get_download_link <- function(name_link) { # funcao pra coletar os XML de cada artigo
-  articles_page <- rvest::read_html(name_link) # converter um site em um objeto XML
 
+  articles_page <- rvest::read_html(name_link) # converter um site em um objeto XML
+  
   link_download_citation <- articles_page %>%
     rvest::html_nodes("#article-info-content a") %>% # extrair os nos relevantes do objeto XML
     rvest::html_attr("href") # extrair os atributos
 }
-
 ################################################################################
 
 # get informations ####
@@ -84,7 +61,7 @@ for (pages in 1:num_pag) { # loop para coletar informacoes de todas as paginas
   
   euphytica <- rvest::read_html(x = next_link, encoding = "UTF-8")
   
-  # step1 (at articles)
+  #step1 (at articles)
   name <- euphytica %>%
     rvest::html_nodes("#results-list .title") %>%
     rvest::html_text()
@@ -102,38 +79,35 @@ for (pages in 1:num_pag) { # loop para coletar informacoes de todas as paginas
     rvest::html_nodes(".snippet") %>%
     rvest::html_text()
   
-  df1 <- base::data.frame(name, name_url, authors, type, description)
+  #step2 (in articles)
+  #collects the information from within each article using the get_download_link function
   
-  # step2 (in articles)
-  # coleta as informacoes de dentro de cada artigo usando a funcao get_download_link
+  # PASSÍVEL DE ERRO DE TIMEOUT
   download_articles <- base::sapply(name_url, 
                                     FUN = get_download_link, 
                                     USE.NAMES = F)
   
-  # junta o dataframe df com as informacoes anteriormente coletadas
-  df2 <- base::rbind(df2, df1)
+  df1 <- base::data.frame(name, name_url, authors, type, description, download_articles)
   
-  # responsavel por informar ao loop novamente o endereco correto da proxima pagina
+  #joins the df data.frame with the previously collected information
+  df2 <- base::rbind(df2, df1)
+
+  #responsible for informing the loop again the correct address of the next page
   next_link <- euphytica %>%
     rvest::html_nodes(".next") %>%
     rvest::html_attr("href") %>%
     base::paste0("https://link.springer.com", .)
   
   next_link <- next_link[1] # coleta apenas um dos links duplicados da proxima pagina
-
-  # pctg <- paste(round(pages/num_pag *100, 0), "% Completed")
-  # setTkProgressBar(pb, pages, label = pctg)
 }
 
-print("Exportando dados...")
-Sys.sleep(1)
+base::print("Exportando dados...")
+base::Sys.sleep(1)
 
 # export dataset ####
 utils::write.csv2(x = df2, file = "/home/jardel/MEGA/scripts-pessoais/RScripts/wheat_scraping/euphytica/euphytica_dataset.csv")
 base::saveRDS(object = df2, file = "/home/jardel/MEGA/scripts-pessoais/RScripts/wheat_scraping/euphytica/euphytica_dataset.RData")
 
-print("Concluído!")
+base::print("Concluído!")
+beepr::beep("facebook")
 
-beep("facebook")
-#Sys.sleep(1)
-#close(pb)

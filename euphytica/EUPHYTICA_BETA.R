@@ -14,9 +14,15 @@ if (!require(progress)) utils::install.packages("progress")
 library(progress)
 if (!require(beepr)) utils::install.packages("beepr")
 library(beepr)
-if (!require(tcltk)) utils::install.packages("tcltk")
+if (!require(parallel)) utils::install.packages("parallel")
+library(parallel)
 library(tcltk)
-################################################################################
+###############################################################################
+
+base <- 4
+no_cores <- detectCores()
+clust <- makeCluster(no_cores)
+clusterExport(clust, "base")
 
 next_link <- "https://link.springer.com/search?query=wheat&search-within=Journal&facet-journal-id=10681"
 
@@ -83,9 +89,8 @@ for (pages in 1:3) {
 	df1 <- base::data.frame(name,name_url,authors,type,description)
 	
 	# step2 (in articles)
-	download_articles <- base::sapply(name_url,
-						    FUN = get_download_link,
-						    USE.NAMES = F)
+	download_articles <- parallel::parSapply(clust, name_url,
+							     FUN = get_download_link)
 	
 	# junta o dataframe df com as informacoes anteriormente coletadas
 	
@@ -103,6 +108,8 @@ for (pages in 1:3) {
 	pctg <- paste(round(pages/3 *100, 0), "% completed")
 	setTkProgressBar(pb, pages, label = pctg)
 }
+
+stopCluster(clust)
 
 beep("facebook")
 Sys.sleep(1)
