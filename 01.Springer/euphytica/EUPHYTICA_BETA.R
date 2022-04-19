@@ -1,11 +1,11 @@
-###############################################
-#######         Euphytica Module        #######
-#######                                 #######
-####### Author: Jardel de Moura Fialho  #######
-####### Project: Web Scraping           #######
-###############################################
+#############################################################################
+######################         Euphytica Module        ######################
+######################                                 ######################
+###################### Author: Jardel de Moura Fialho  ######################
+###################### Project: Web Scraping           ######################
+#############################################################################
 
-####################################### Header #########################################
+####################################### Header ######################################
 
 base::cat("...Running Euphytica Module...\n") #indicates that the script has started
 
@@ -19,7 +19,7 @@ base::rm(list = base::ls())
 if (!base::require(pacman)) utils::install.packages("pacman") #if it doesn't load, install and load
 base::library(pacman, verbose = FALSE); pacman::p_load(dplyr, rvest, progress, beepr, tcltk)
 
-################################ Declaring functions ################################################
+################################ Declaring functions ################################
 
 #main function get informations and save it in data.frame object
 EupthyticaInformations <- function() {
@@ -111,12 +111,12 @@ export_dataset <- function(df) {
 	base::saveRDS(object = df, file = "/home/jardel/MEGA/scripts-pessoais/RScripts/wheat_scraping/01.Springer/euphytica/euphytica_dataset.RData")
 }
 
-################################## Call functions ##############################################
+################################## Call functions ###################################
 
 euphytica_dataset <- EupthyticaInformations()
 #export_dataset(euphytica_dataset)
 
-################################## End script ##############################################
+################################## End script #######################################
 
 base::Sys.sleep(1)
 beepr::beep("facebook")
