@@ -37,7 +37,7 @@ pb <- progress_bar$new(format = ":current/:total [:bar] (:percent)",
                        current = "#",
                        clear = FALSE)
 
-df1 <- base::data.frame() #define a clean dataframe
+df <- base::data.frame() #define a clean dataframe
 ################################################################################
 
 # functions ####
@@ -48,8 +48,9 @@ get_download_link <- function(name_link) { # funcao pra coletar os XML de cada a
   articles_page <- rvest::read_html(name_link) # converter um site em um objeto XML
   
   link_download_citation <- articles_page %>%
-    rvest::html_nodes("#article-info-content a") %>% # extrair os nos relevantes do objeto XML
+    rvest::html_nodes(".c-bibliographic-information__download-citation a") %>% # extrair os nos relevantes do objeto XML
     rvest::html_attr("href") # extrair os atributos
+  return(link_download_citation)
 }
 ################################################################################
 
@@ -81,15 +82,18 @@ for (pages in 1:5) { # loop para coletar informacoes de todas as paginas
   
   #step2 (in articles)
   #collects the information from within each article using the get_download_link function
-
-  download_articles <- base::sapply(name_url, 
-                                    FUN = get_download_link, 
-                                    USE.NAMES = F)
+  link_download_citations <- base::sapply(name_url,
+                                        FUN = get_download_link,
+                                        USE.NAMES = FALSE)
   
-  df1 <- base::data.frame(name, name_url, authors, type, description, download_articles)
-  
-  #joins the df data.frame with the previously collected information
-  df2 <- base::rbind(df2, df1)
+  #joins the informations in variables
+  df <- base::rbind(df, base::data.frame(name,
+                                         name_url,
+                                         authors,
+                                         type,
+                                         description,
+                                         link_download_citations,
+                                         stringsAsFactors = FALSE))
 
   #responsible for informing the loop again the correct address of the next page
   next_link <- euphytica %>%
@@ -104,8 +108,8 @@ base::print("Exportando dados...")
 base::Sys.sleep(1)
 
 # export dataset ####
-utils::write.csv2(x = df2, file = "/home/jardel/MEGA/scripts-pessoais/RScripts/wheat_scraping/euphytica/euphytica_dataset.csv")
-base::saveRDS(object = df2, file = "/home/jardel/MEGA/scripts-pessoais/RScripts/wheat_scraping/euphytica/euphytica_dataset.RData")
+utils::write.csv2(x = df, file = "/home/jardel/MEGA/scripts-pessoais/RScripts/wheat_scraping/01.Springer/euphytica/euphytica_dataset.csv")
+base::saveRDS(object = df, file = "/home/jardel/MEGA/scripts-pessoais/RScripts/wheat_scraping/01.Springer/euphytica/euphytica_dataset.RData")
 
 base::print("Concluído!")
 base::Sys.sleep(1)
