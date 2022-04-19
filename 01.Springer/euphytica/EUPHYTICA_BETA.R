@@ -1,116 +1,123 @@
-Sys.setenv("http_proxy"="")
-Sys.setenv("no_proxy"=TRUE)
-Sys.setenv("no_proxy"=1)
+###############################################
+#######         Euphytica Module        #######
+#######                                 #######
+####### Author: Jardel de Moura Fialho  #######
+####### Project: Web Scraping           #######
+###############################################
 
-base::print("Rodando...") 
+####################################### Header #########################################
+
+base::cat("...Running Euphytica Module...\n") #indicates that the script has started
+
+#prevent proxy problems
+base::Sys.setenv("http_proxy"=""); base::Sys.setenv("no_proxy"=TRUE);base::Sys.setenv("no_proxy"=1) 
+
+#clear environment variables
 base::rm(list = base::ls()) 
 
+# installing and loading packages if necessary ####
+if (!base::require(pacman)) utils::install.packages("pacman") #if it doesn't load, install and load
+base::library(pacman, verbose = FALSE); pacman::p_load(dplyr, rvest, progress, beepr, tcltk)
 
-if (!require(dplyr)) utils::install.packages("dplyr") 
-library(dplyr)
-if (!require(rvest)) utils::install.packages("rvest")
-library(rvest)
-if (!require(progress)) utils::install.packages("progress")
-library(progress)
-if (!require(beepr)) utils::install.packages("beepr")
-library(beepr)
-if (!require(parallel)) utils::install.packages("parallel")
-library(parallel)
-library(tcltk)
-###############################################################################
+################################ Declaring functions ################################################
 
-base <- 4
-no_cores <- detectCores()
-clust <- makeCluster(no_cores)
-clusterExport(clust, "base")
-
-next_link <- "https://link.springer.com/search?query=wheat&search-within=Journal&facet-journal-id=10681"
-
-# get informations ####
-num_pag <- rvest::read_html(next_link) %>% 
-	rvest::html_nodes(".functions-bar-top .number-of-pages") %>% 
-	rvest::html_text() %>% 
-	base::as.integer() 
-
-pb <- tkProgressBar(title = "Wheat Scraping - Euphytica",
-			  label = "Running... Please, wait...",
-			  min = 0,
-			  max = 3,
-			  initial = 0)
-
-df2 <- base::data.frame()
-
-################################################################################
-
-# functions ####
-#obtem os links de downaload dos artigos
-get_download_link <- function(name_link) { 
-	articles_page <- rvest::read_html(name_link) 
+#main function get informations and save it in data.frame object
+EupthyticaInformations <- function() {
 	
-	link_download_citation <- articles_page %>%
-		rvest::html_nodes("#article-info-content a") %>% 
-		rvest::html_attr("href") 
+	base::cat("... Starting data extraction...\n")
+	
+	#main link
+	next_link <- "https://link.springer.com/search?query=wheat&search-within=Journal&facet-journal-id=10681"
+	
+	#get the article download links
+	get_download_link <- function(name_link) { #funcao pra coletar os XML de cada artigo
+		
+		articles_page <- rvest::read_html(name_link) #converter um site em um objeto XML
+		
+		link_download_citation <- articles_page %>%
+			rvest::html_nodes(".c-bibliographic-information__download-citation a") %>% #extrair os nos relevantes do objeto XML
+			rvest::html_attr("href") #extrair os atributos
+		return(link_download_citation)
+	}
+	
+	#num_pag saves the number of pages that exist on the site
+	num_pag <- rvest::read_html(next_link) %>% # converter um site em um objeto XML
+		rvest::html_nodes(".functions-bar-top .number-of-pages") %>% # extrair os nos relevantes do objeto XML
+		rvest::html_text() %>% # extrair os dados marcados
+		base::as.integer() # transforma o "character" para "integer"
+	
+	#create the progress bar
+	pb <- progress_bar$new(format = ":current/:total [:bar] :percent [Time: :elapsedfull]", 
+				     total = num_pag,
+				     complete = "=",
+				     incomplete = "-",
+				     current = ">",
+				     clear = FALSE,)
+	
+	#define a clean dataframe
+	df <- base::data.frame()
+	
+	for (pages in 1:num_pag) { #loop to collect information within all available pages
+		
+		pb$tick()
+		
+		euphytica <- rvest::read_html(x = next_link, encoding = "UTF-8")
+		
+		#step1 (at articles)
+		name <- euphytica %>%
+			rvest::html_nodes("#results-list .title") %>%
+			rvest::html_text()
+		name_url <- euphytica %>%
+			rvest::html_nodes("#results-list .title") %>%
+			rvest::html_attr("href") %>%
+			base::paste0("https://link.springer.com", .) # une parte do link extraido como o principal
+		authors <- euphytica %>%
+			rvest::html_nodes(".meta") %>%
+			rvest::html_text2()
+		type <- euphytica %>%
+			rvest::html_nodes(".content-type") %>%
+			rvest::html_text2()
+		description <- euphytica %>%
+			rvest::html_nodes(".snippet") %>%
+			rvest::html_text()
+		
+		#step2 (inside articles)
+		#collects the information from within each article using the get_download_link function
+		link_download_citations <- base::sapply(name_url, FUN = get_download_link, USE.NAMES = FALSE)
+		
+		#joins the informations in variables
+		df <- base::rbind(df, base::data.frame(name, name_url, authors, type,description,link_download_citations,
+								   stringsAsFactors = FALSE))
+		
+		#responsible for informing the loop again the correct address of the next page
+		next_link <- euphytica %>%
+			rvest::html_nodes(".next") %>%
+			rvest::html_attr("href") %>%
+			base::paste0("https://link.springer.com", .)
+		
+		#collects only one of the duplicate links from the next page
+		next_link <- next_link[1]
+	}; return(df)
 }
 
-#get_other_information <- function(name_link) {
-'articles_page <- rvest::read_html(name_link)
-
-  published <- articles_page %>%
-  rvest::html_nodes("time") %>%
-  rvest::html_text()
-  accesses <- articles_page %>%
-  rvest::html_nodes(".c-article-metrics-bar__count") %>%
-  rvest::html_text()'
-
-################################################################################
-
-for (pages in 1:3) { 
-
-	euphytica <- rvest::read_html(x = next_link, encoding = "UTF-8")
+#exports data in different formats
+export_dataset <- function(df) {
 	
-	# step1 (at articles)
-	name <- euphytica %>%
-		rvest::html_nodes("#results-list .title") %>%
-		rvest::html_text()
-	name_url <- euphytica %>%
-		rvest::html_nodes("#results-list .title") %>%
-		rvest::html_attr("href") %>%
-		base::paste0("https://link.springer.com", .) 
-	authors <- euphytica %>%
-		rvest::html_nodes(".meta") %>%
-		rvest::html_text2()
-	type <- euphytica %>%
-		rvest::html_nodes(".content-type") %>%
-		rvest::html_text2()
-	description <- euphytica %>%
-		rvest::html_nodes(".snippet") %>%
-		rvest::html_text()
+	base::cat("Exportando dados...\n")
+	base::Sys.sleep(1)
 	
-	df1 <- base::data.frame(name,name_url,authors,type,description)
-	
-	# step2 (in articles)
-	download_articles <- parallel::parSapply(clust, name_url,
-							     FUN = get_download_link)
-	
-	# junta o dataframe df com as informacoes anteriormente coletadas
-	
-	# O df ACUMULA MAIS LINHAS QUE O OUTRO data.frame || DEVIA ACUMULAR IGUAL
-	df2 <- base::rbind(df2, df1)
-	
-	# responsavel por informar ao loop novamente o endereco correto da proxima pagina
-	next_link <- euphytica %>%
-		rvest::html_nodes(".next") %>%
-		rvest::html_attr("href") %>%
-		base::paste0("https://link.springer.com", .)
-	
-	next_link <- next_link[1] # coleta apenas um dos links duplicados da proxima pagina
-
-	pctg <- paste(round(pages/3 *100, 0), "% completed")
-	setTkProgressBar(pb, pages, label = pctg)
+	utils::write.csv2(x = df, file = "/home/jardel/MEGA/scripts-pessoais/RScripts/wheat_scraping/01.Springer/euphytica/euphytica_dataset.csv")
+	writexl::write_xlsx(x = df, path = "/home/jardel/MEGA/scripts-pessoais/RScripts/wheat_scraping/01.Springer/euphytica/euphytica_dataset.xlsx", col_names = TRUE)
+	base::saveRDS(object = df, file = "/home/jardel/MEGA/scripts-pessoais/RScripts/wheat_scraping/01.Springer/euphytica/euphytica_dataset.RData")
 }
 
-stopCluster(clust)
+################################## Call functions ##############################################
 
-beep("facebook")
-Sys.sleep(1)
-close(pb)
+euphytica_dataset <- EupthyticaInformations()
+#export_dataset(euphytica_dataset)
+
+################################## End script ##############################################
+
+base::Sys.sleep(1)
+beepr::beep("facebook")
+base::system(command = "notify-send -t 0 'O módulo Euphytica Terminou'") #especific command to Unix system

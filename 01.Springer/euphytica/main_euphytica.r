@@ -5,19 +5,18 @@
 ####### Project: Web Scraping           #######
 ###############################################
 
-base::cat("Rodando...") #indicates that the script has started
+base::cat("...Rodando Euphytica Module...\n") #indicates that the script has started
 
-base::Sys.setenv("http_proxy"="")
-base::Sys.setenv("no_proxy"=TRUE)
-base::Sys.setenv("no_proxy"=1) #prevent proxy problems
+#prevent proxy problems
+base::Sys.setenv("http_proxy"=""); base::Sys.setenv("no_proxy"=TRUE);base::Sys.setenv("no_proxy"=1) 
 
-base::rm(list = base::ls()) #clear environment variables
+#clear environment variables
+base::rm(list = base::ls()) 
 
 # installing and loading packages if necessary ####
 if (!base::require(pacman)) utils::install.packages("pacman") #if it doesn't load, install and load
-base::library(pacman)
+base::library(pacman); pacman::p_load(dplyr, rvest, progress, beepr, tcltk)
 
-pacman::p_load(dplyr, rvest, progress, beepr, tcltk)
 ################################################################################
 
 # main link ####
@@ -30,28 +29,30 @@ num_pag <- rvest::read_html(next_link) %>% # converter um site em um objeto XML
   base::as.integer() # transforma o "character" para "integer"
 
 #create the progress bar
-pb <- progress_bar$new(format = ":current/:total [:bar] :percent [Decorrido: :elapsedfull || Falta: :eta]", 
+pb <- progress_bar$new(format = ":current/:total [:bar] :percent [Time: :elapsedfull]", 
                        total = 5,
                        complete = "=",
                        incomplete = "-",
                        current = ">",
-                       clear = FALSE)
+                       clear = FALSE,)
 
 df <- base::data.frame() #define a clean dataframe
+
 ################################################################################
 
 # functions ####
 
 #get the article download links
-get_download_link <- function(name_link) { # funcao pra coletar os XML de cada artigo
+get_download_link <- function(name_link) { #funcao pra coletar os XML de cada artigo
 
-  articles_page <- rvest::read_html(name_link) # converter um site em um objeto XML
+  articles_page <- rvest::read_html(name_link) #converter um site em um objeto XML
   
   link_download_citation <- articles_page %>%
-    rvest::html_nodes(".c-bibliographic-information__download-citation a") %>% # extrair os nos relevantes do objeto XML
-    rvest::html_attr("href") # extrair os atributos
+    rvest::html_nodes(".c-bibliographic-information__download-citation a") %>% #extrair os nos relevantes do objeto XML
+    rvest::html_attr("href") #extrair os atributos
   return(link_download_citation)
 }
+
 ################################################################################
 
 # get informations ####
@@ -69,7 +70,7 @@ for (pages in 1:5) { # loop para coletar informacoes de todas as paginas
   name_url <- euphytica %>%
     rvest::html_nodes("#results-list .title") %>%
     rvest::html_attr("href") %>%
-    base::paste0("https://link.springer.com", .) # une parte do link extraido como  principal
+    base::paste0("https://link.springer.com", .) # une parte do link extraido como o principal
   authors <- euphytica %>%
     rvest::html_nodes(".meta") %>%
     rvest::html_text2()
@@ -82,17 +83,10 @@ for (pages in 1:5) { # loop para coletar informacoes de todas as paginas
   
   #step2 (in articles)
   #collects the information from within each article using the get_download_link function
-  link_download_citations <- base::sapply(name_url,
-                                        FUN = get_download_link,
-                                        USE.NAMES = FALSE)
+  link_download_citations <- base::sapply(name_url, FUN = get_download_link, USE.NAMES = FALSE)
   
   #joins the informations in variables
-  df <- base::rbind(df, base::data.frame(name,
-                                         name_url,
-                                         authors,
-                                         type,
-                                         description,
-                                         link_download_citations,
+  df <- base::rbind(df, base::data.frame(name, name_url, authors, type,description,link_download_citations,
                                          stringsAsFactors = FALSE))
 
   #responsible for informing the loop again the correct address of the next page
@@ -104,15 +98,16 @@ for (pages in 1:5) { # loop para coletar informacoes de todas as paginas
   next_link <- next_link[1] # coleta apenas um dos links duplicados da proxima pagina
 }
 
-base::cat("Exportando dados...")
-base::Sys.sleep(1)
+################################################################################
 
 # export dataset ####
+base::cat("Exportando dados...\n")
+base::Sys.sleep(1)
+
 utils::write.csv2(x = df, file = "/home/jardel/MEGA/scripts-pessoais/RScripts/wheat_scraping/01.Springer/euphytica/euphytica_dataset.csv")
 writexl::write_xlsx(x = df, path = "/home/jardel/MEGA/scripts-pessoais/RScripts/wheat_scraping/01.Springer/euphytica/euphytica_dataset.xlsx", col_names = TRUE)
 base::saveRDS(object = df, file = "/home/jardel/MEGA/scripts-pessoais/RScripts/wheat_scraping/01.Springer/euphytica/euphytica_dataset.RData")
 
-base::cat("Concluído!")
 base::Sys.sleep(1)
 beepr::beep("facebook")
-base::system(command = "notify-send -t 0 'O módulo Euphytica Terminou'")
+base::system(command = "notify-send -t 0 'O módulo Euphytica Terminou'") # especific command to Unix system
