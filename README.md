@@ -43,6 +43,8 @@ Com base no escopo do script e nos testes de desenvolvimento, nessa sessão, est
 
 [^6]: https://rockcontent.com/br/blog/504-gateway-timeout/
 
+* **Mudança de marcadores CSS e HTML das páginas de interesse:** Os marcadores dos elementos nas páginas alvo podem ser alterados ou outros iguais podem ser adicionados, sendo necessário remapear as páginas manualmente (no Firefox use <https://github.com/hermit-crab/ScrapeMate#readme> e no Google Chrome ou derivados use <https://selectorgadget.com/>) para atualizar os marcadores no código. 
+
 ## Materiais de apoio
 
 * Usando R: Um Guia para Cientistas Políticos: [Por Fernando Meireles - fmeireles@ufmg.br e Denisson Silva - denissonsilva@ufmg.br](https://electionsbr.com/livro/bases.html)  
