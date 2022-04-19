@@ -5,7 +5,7 @@
 ####### Project: Web Scraping           #######
 ###############################################
 
-base::print("Rodando...") #indicates that the script has started
+base::cat("Rodando...") #indicates that the script has started
 
 base::Sys.setenv("http_proxy"="")
 base::Sys.setenv("no_proxy"=TRUE)
@@ -30,11 +30,11 @@ num_pag <- rvest::read_html(next_link) %>% # converter um site em um objeto XML
   base::as.integer() # transforma o "character" para "integer"
 
 #create the progress bar
-pb <- progress_bar$new(format = ":current/:total [:bar] (:percent)", 
+pb <- progress_bar$new(format = ":current/:total [:bar] :percent [Decorrido: :elapsedfull || Falta: :eta]", 
                        total = 5,
-                       complete = "#",
-                       incomplete = ".",
-                       current = "#",
+                       complete = "=",
+                       incomplete = "-",
+                       current = ">",
                        clear = FALSE)
 
 df <- base::data.frame() #define a clean dataframe
@@ -104,14 +104,15 @@ for (pages in 1:5) { # loop para coletar informacoes de todas as paginas
   next_link <- next_link[1] # coleta apenas um dos links duplicados da proxima pagina
 }
 
-base::print("Exportando dados...")
+base::cat("Exportando dados...")
 base::Sys.sleep(1)
 
 # export dataset ####
 utils::write.csv2(x = df, file = "/home/jardel/MEGA/scripts-pessoais/RScripts/wheat_scraping/01.Springer/euphytica/euphytica_dataset.csv")
+writexl::write_xlsx(x = df, path = "/home/jardel/MEGA/scripts-pessoais/RScripts/wheat_scraping/01.Springer/euphytica/euphytica_dataset.xlsx", col_names = TRUE)
 base::saveRDS(object = df, file = "/home/jardel/MEGA/scripts-pessoais/RScripts/wheat_scraping/01.Springer/euphytica/euphytica_dataset.RData")
 
-base::print("Concluído!")
+base::cat("Concluído!")
 base::Sys.sleep(1)
 beepr::beep("facebook")
-
+base::system(command = "notify-send -t 0 'O módulo Euphytica Terminou'")
