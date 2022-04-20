@@ -1,13 +1,15 @@
 #############################################################################
-######################         Euphytica Module        ######################
-######################                                 ######################
-###################### Author: Jardel de Moura Fialho  ######################
-###################### Project: Web Scraping           ######################
+##############	Genetic Resources and Crop Evolution Module     ###########
+##############                            				###########
+############## Author: Jardel de Moura Fialho				###########
+############## Project: Web Scraping      				###########
 #############################################################################
+
+# OBS: para essa revista é possível usar o exato codigo da Euphytica
 
 ####################################### Header ######################################
 
-base::cat("...Running Euphytica Module...\n") #indicates that the script has started
+base::cat("...Genetic Resources and Crop Evolution Module...\n") #indicates that the script has started
 
 #prevent proxy problems
 base::Sys.setenv("http_proxy"=""); base::Sys.setenv("no_proxy"=TRUE);base::Sys.setenv("no_proxy"=1) 
@@ -27,7 +29,7 @@ EupthyticaInformations <- function() {
 	base::cat("... Starting data extraction...\n")
 	
 	#main link
-	next_link <- "https://link.springer.com/search?query=wheat&search-within=Journal&facet-journal-id=10681"
+	next_link <- "https://link.springer.com/search?query=&search-within=Journal&facet-journal-id=10722"
 	
 	#get the article download links
 	get_download_link <- function(name_link) { #funcao pra coletar os XML de cada artigo
@@ -48,7 +50,7 @@ EupthyticaInformations <- function() {
 	
 	#create the progress bar
 	pb <- progress_bar$new(format = ":current/:total [:bar] :percent [Time: :elapsedfull]", 
-				     total = num_pag,
+				     total = 5,
 				     complete = "=",
 				     incomplete = "-",
 				     current = ">",
@@ -57,7 +59,7 @@ EupthyticaInformations <- function() {
 	#define a clean dataframe
 	df <- base::data.frame()
 	
-	for (pages in 1:num_pag) { #loop to collect information within all available pages
+	for (pages in 1:5) { #loop to collect information within all available pages
 		
 		pb$tick()
 		
@@ -106,18 +108,18 @@ export_dataset <- function(df) {
 	base::cat("Exportando dados...\n")
 	base::Sys.sleep(1)
 	
-	utils::write.csv2(x = df, file = "/home/jardel/MEGA/scripts-pessoais/RScripts/wheat_scraping/01.Springer/euphytica/exported_datasets/euphytica_dataset.csv")
-	writexl::write_xlsx(x = df, path = "/home/jardel/MEGA/scripts-pessoais/RScripts/wheat_scraping/01.Springer/euphytica/exported_datasets/euphytica_dataset.xlsx", col_names = TRUE)
-	base::saveRDS(object = df, file = "/home/jardel/MEGA/scripts-pessoais/RScripts/wheat_scraping/01.Springer/euphytica/exported_datasets/euphytica_dataset.RData")
+	utils::write.csv2(x = df, file = "/home/jardel/MEGA/scripts-pessoais/RScripts/wheat_scraping/01.Springer/Genetic_Resources_and_Crop_Evolution/exported_datasets/GRCE.csv")
+	writexl::write_xlsx(x = df, path = "/home/jardel/MEGA/scripts-pessoais/RScripts/wheat_scraping/01.Springer/Genetic_Resources_and_Crop_Evolution/exported_datasets/GRCE.xlsx", col_names = TRUE)
+	base::saveRDS(object = df, file = "/home/jardel/MEGA/scripts-pessoais/RScripts/wheat_scraping/01.Springer/Genetic_Resources_and_Crop_Evolution/exported_datasets/GRCE.RData")
 }
 
 ################################## Call functions ###################################
 
 euphytica_dataset <- EupthyticaInformations()
-#export_dataset(euphytica_dataset)
+export_dataset(euphytica_dataset)
 
 ################################## End script #######################################
 
 base::Sys.sleep(1)
 beepr::beep("facebook")
-base::system(command = "notify-send -t 0 'O módulo Euphytica Terminou'") #especific command to Unix system
+base::system(command = "notify-send -t 0 'The Genetic Resources and Crop Evolution module finished'") #especific command to Unix system

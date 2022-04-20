@@ -23,7 +23,7 @@ menu(){
 
         echo
         echo -e '\033[1;32m[ 1 ] Euphytica\033[0m'
-        echo -e '\033[1;32m[ 2 ] Outra revista\033[0m'
+        echo -e '\033[1;32m[ 2 ] Genetic Resources and Crop Evolution\033[0m'
         echo -e '\033[1;32m[ 3 ] Outra revista\033[0m'
         echo -e '\033[1;32m[ 4 ] Outra revista\033[0m'
         echo
@@ -36,7 +36,7 @@ menu(){
 
         elif [ "$opc1" == 2 ]; then
 
-            Rscript /home/$USER/MEGA/scripts-pessoais/RScripts/wheat_scraping/01.Springer/euphytica/main_euphytica.r
+            Rscript /home/$USER/MEGA/scripts-pessoais/RScripts/wheat_scraping/01.Springer/Genetic_Resources_and_Crop_Evolution/main_GRCE.r
 
         elif [ "$opc1" == 3 ]; then
 
