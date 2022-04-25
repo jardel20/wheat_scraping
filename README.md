@@ -49,7 +49,12 @@ Com base no escopo do script e nos testes de desenvolvimento, nessa sessão, est
 
 Para esse projeto usamos algumas dependências:  
 
-* **Dependêncas do R:** `{rvest}`[^3], `{pacman}`[^8], `{dplyr}`[^9], `{progress}`[^10], `{beepr}`[^11].
+* **Dependêncas do R:** 
+	+ `{rvest}`[^3]
+	+ `{pacman}`[^8]
+	+ `{dplyr}`[^9]
+	+ `{progress}`[^10]
+	+ `{beepr}`[^11].
 
 [^7]: https://rdocumentation.org/packages/rvest/versions/1.0.2
 [^8]: https://www.rdocumentation.org/packages/pacman/versions/0.5.1
@@ -57,7 +62,8 @@ Para esse projeto usamos algumas dependências:
 [^10]: https://www.rdocumentation.org/packages/httr/versions/1.4.2/topics/progress
 [^11]: https://www.rdocumentation.org/packages/beepr/versions/1.3/topics/beepr
 
-* **Dependências de systema:** R version 4.1.3[^1] ou superior
+* **Dependências de systema:**
+	+ R version 4.1.3[^1] ou superior
 
 ## Materiais de apoio
 
