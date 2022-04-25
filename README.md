@@ -45,6 +45,20 @@ Com base no escopo do script e nos testes de desenvolvimento, nessa sessão, est
 
 * **Mudança de marcadores CSS e HTML das páginas de interesse:** Os marcadores dos elementos nas páginas alvo podem ser alterados ou outros iguais podem ser adicionados, sendo necessário remapear as páginas manualmente (no Firefox use <https://github.com/hermit-crab/ScrapeMate#readme> e no Google Chrome ou derivados use <https://selectorgadget.com/>) para atualizar os marcadores no código. 
 
+## Dependências
+
+Para esse projeto usamos algumas dependências:  
+
+* **Dependêncas do R:** `{rvest}`[^7], `{pacman}`[^8], `{dplyr}`[^9], `{progress}`[^10], `{beepr}`[^11].
+
+[^7]: https://rdocumentation.org/packages/rvest/versions/1.0.2
+[^8]: https://www.rdocumentation.org/packages/pacman/versions/0.5.1
+[^9]: https://www.rdocumentation.org/packages/dplyr/versions/0.7.8
+[^10]: https://www.rdocumentation.org/packages/httr/versions/1.4.2/topics/progress
+[^11]: https://www.rdocumentation.org/packages/beepr/versions/1.3/topics/beepr
+
+* **Dependências de systema:** R version 4.1.3 ou superior
+
 ## Materiais de apoio
 
 * Usando R: Um Guia para Cientistas Políticos: [Por Fernando Meireles - fmeireles@ufmg.br e Denisson Silva - denissonsilva@ufmg.br](https://electionsbr.com/livro/bases.html)  
