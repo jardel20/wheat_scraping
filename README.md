@@ -62,7 +62,7 @@ Para esse projeto usamos algumas dependências:
 [^10]: https://www.rdocumentation.org/packages/httr/versions/1.4.2/topics/progress
 [^11]: https://www.rdocumentation.org/packages/beepr/versions/1.3/topics/beepr
 
-* **Dependências de systema:**
+* **Dependências de sistema:**
 	+ R version 4.1.3[^1] ou superior
 
 ## Materiais de apoio
