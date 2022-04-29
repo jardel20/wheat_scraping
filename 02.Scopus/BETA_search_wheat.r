@@ -1,15 +1,17 @@
-#############################################################################
-##############	Genetic Resources and Crop Evolution Module     ###########
-##############                            				###########
-############## Author: Jardel de Moura Fialho				###########
-############## Project: Web Scraping      				###########
-#############################################################################
+###########################################################
+##############	SciELO Search Wheat Module	###########
+##############                            	###########
+############## Author: Jardel de Moura Fialho	###########
+############## Project: Web Scraping      	###########
+###########################################################
 
-# OBS: para essa revista é possível usar o exato codigo da Euphytica
+# ainda NÃO FUNCIONAL
+
+# OBS: para esse objetivo, foi pesquisado por "wheat" e fltrado por "Agronomy"
 
 ####################################### Header ######################################
 
-base::cat("...Genetic Resources and Crop Evolution Module...\n") #indicates that the script has started
+base::cat("...Running SciELO Search Wheat Module...\n") #indicates that the script has started
 
 #prevent proxy problems
 base::Sys.setenv("http_proxy"=""); base::Sys.setenv("no_proxy"=TRUE);base::Sys.setenv("no_proxy"=1) 
@@ -29,7 +31,7 @@ EupthyticaInformations <- function() {
 	base::cat("...Starting data extraction...\n")
 	
 	#main link
-	next_link <- "https://link.springer.com/search?query=&search-within=Journal&facet-journal-id=10722"
+	next_link <- "https://search.scielo.org/?q=herdabilidade&lang=en&count=15&from=1&output=site&sort=&format=summary&fb=&page=1&filter%5Bwok_subject_categories%5D%5B%5D=agronomy&q=wheat&lang=en&page=1"
 	
 	#get the article download links
 	get_download_link <- function(name_link) { #funcao pra coletar os XML de cada artigo
@@ -67,12 +69,12 @@ EupthyticaInformations <- function() {
 		
 		#step1 (at articles)
 		name <- euphytica %>%
-			rvest::html_nodes("#results-list .title") %>%
+			rvest::html_nodes("#ResultArea .title") %>%
 			rvest::html_text()
 		name_url <- euphytica %>%
-			rvest::html_nodes("#results-list .title") %>%
+			rvest::html_nodes("#ResultArea .title") %>%
 			rvest::html_attr("href") %>%
-			base::paste0("https://link.springer.com", .) # une parte do link extraido como o principal
+			#base::paste0("https://link.springer.com", .) # une parte do link extraido como o principal
 		authors <- euphytica %>%
 			rvest::html_nodes(".meta") %>%
 			rvest::html_text2()
@@ -123,3 +125,4 @@ export_dataset(euphytica_dataset)
 base::Sys.sleep(1)
 beepr::beep("facebook")
 base::system(command = "notify-send -t 0 'The Genetic Resources and Crop Evolution module finished'") #especific command to Unix system
+
