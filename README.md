@@ -23,7 +23,7 @@ Bases de revistas/sites usados:
 * Wiley
 * SciELO
 
-Por fim, um script executa em command line (CLI) ou com janelas gráficas um modo interativo para controlar os módulos. A lingágem a ser usada pode ser **Shell Script**[^4] ou outra lingúagem mais universal, como **Python**[^5].
+Por fim, um script executa em command line (CLI) ou com janelas gráficas um modo interativo para controlar os módulos. A lingágem a ser usada pode ser **Shell Script**[^4] ou outra lingúagem mais universal, como **Python**[^5] ou C++.
 
 [^4]: https://www.wikiwand.com/pt/Shell_script
 [^5]: https://www.python.org/
