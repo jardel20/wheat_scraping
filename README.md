@@ -18,6 +18,7 @@ Em módulos (scripts.r), cada revista recebe um código personalizado para extra
 Bases de revistas/sites usados:  
 * Springer <img src="https://github.com/jardel20/wheat_scraping/blob/main/images/springer_icon.png" alt="springer_icon" height="30px" width="30px" style="vertical-align:middle"/>
 	+ Euphytica: <https://link.springer.com/search?query=wheat&search-within=Journal&facet-journal-id=10681>
+	+ Genetic Resources and Crop Evolution: <https://link.springer.com/search?query=&search-within=Journal&facet-journal-id=10722>
 * Scopus
 * Wiley
 * SciELO
