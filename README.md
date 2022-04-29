@@ -18,11 +18,12 @@ Em módulos (scripts.r), cada revista recebe um código personalizado para extra
 Bases de revistas/sites usados:  
 * Springer <img src="https://github.com/jardel20/wheat_scraping/blob/main/images/springer_icon.png" alt="springer_icon" height="30px" width="30px" style="vertical-align:middle"/>
 	+ Euphytica: <https://link.springer.com/search?query=wheat&search-within=Journal&facet-journal-id=10681>
+	+ Genetic Resources and Crop Evolution: <https://link.springer.com/search?query=&search-within=Journal&facet-journal-id=10722>
 * Scopus
 * Wiley
 * SciELO
 
-Por fim, um script executa em command line (CLI) ou com janelas gráficas um modo interativo para controlar os módulos. A lingágem a ser usada pode ser **Shell Script**[^4] ou outra lingúagem mais universal, como **Python**[^5].
+Por fim, um script executa em command line (CLI) ou com janelas gráficas um modo interativo para controlar os módulos. A lingágem a ser usada pode ser **Shell Script**[^4] ou outra lingúagem mais universal, como **Python**[^5] ou C++.
 
 [^4]: https://www.wikiwand.com/pt/Shell_script
 [^5]: https://www.python.org/
@@ -44,6 +45,26 @@ Com base no escopo do script e nos testes de desenvolvimento, nessa sessão, est
 [^6]: https://rockcontent.com/br/blog/504-gateway-timeout/
 
 * **Mudança de marcadores CSS e HTML das páginas de interesse:** Os marcadores dos elementos nas páginas alvo podem ser alterados ou outros iguais podem ser adicionados, sendo necessário remapear as páginas manualmente (no Firefox use <https://github.com/hermit-crab/ScrapeMate#readme> e no Google Chrome ou derivados use <https://selectorgadget.com/>) para atualizar os marcadores no código. 
+
+## Dependências
+
+Para esse projeto usamos algumas dependências:  
+
+* **Dependêncas do R:** 
+	+ `{rvest}`[^3]
+	+ `{pacman}`[^8]
+	+ `{dplyr}`[^9]
+	+ `{progress}`[^10]
+	+ `{beepr}`[^11].
+
+[^7]: https://rdocumentation.org/packages/rvest/versions/1.0.2
+[^8]: https://www.rdocumentation.org/packages/pacman/versions/0.5.1
+[^9]: https://www.rdocumentation.org/packages/dplyr/versions/0.7.8
+[^10]: https://www.rdocumentation.org/packages/httr/versions/1.4.2/topics/progress
+[^11]: https://www.rdocumentation.org/packages/beepr/versions/1.3/topics/beepr
+
+* **Dependências de sistema:**
+	+ R version 4.1.3[^1] ou superior
 
 ## Materiais de apoio
 
