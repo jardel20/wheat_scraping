@@ -1,5 +1,5 @@
 #############################################################################
-######################         Euphytica Module        ######################
+######################         euphytica Module        ######################
 ######################                                 ######################
 ###################### Author: Jardel de Moura Fialho  ######################
 ###################### Project: Web Scraping           ######################
@@ -7,7 +7,7 @@
 
 ####################################### Header ######################################
 
-base::cat("...Running Euphytica Module...\n") #indicates that the script has started
+base::cat("...Running euphytica Module...\n") #indicates that the script has started
 
 #prevent proxy problems
 base::Sys.setenv("http_proxy"="")
@@ -24,15 +24,12 @@ base::library(pacman, verbose = FALSE); pacman::p_load(dplyr, rvest, progress, b
 ################################ Declaring functions ################################
 
 #main function get informations and save it in data.frame object
-EupthyticaInformations <- function(link) {
+EuphyticaInformations <- function(link) {
 	
 	base::cat("...Starting data extraction...\n")
 	
 	#main link
 	next_link <- link
-	
-	## provisório
-	next_link <- "https://link.springer.com/search?query=wheat&search-within=Journal&facet-journal-id=10681"
 	
 	#get the article download links
 	get_download_citation <- function(name_link) {
@@ -42,7 +39,6 @@ EupthyticaInformations <- function(link) {
 		link_download_citation <- articles_page %>%
 			rvest::html_nodes(".c-bibliographic-information__download-citation a") %>%
 			rvest::html_attr("href")
-		
 		return(link_download_citation)
 	}
 	
@@ -54,7 +50,6 @@ EupthyticaInformations <- function(link) {
 			rvest::html_nodes("#cobranding-and-download-availability-text a") %>% 
 			rvest::html_attr("href") %>% 
 			base::paste0("https://link.springer.com", .)
-		
 		return(link_download_article)
 	}
 	
@@ -79,22 +74,22 @@ EupthyticaInformations <- function(link) {
 		
 		pb$tick()
 		
-		euphytica <- rvest::read_html(x = next_link, encoding = "UTF-8")
+		page_element <- rvest::read_html(x = next_link, encoding = "UTF-8")
 		
-		name <- euphytica %>%
+		name <- page_element %>%
 			rvest::html_nodes("#results-list .title") %>%
 			rvest::html_text()
-		name_url <- euphytica %>%
+		name_url <- page_element %>%
 			rvest::html_nodes("#results-list .title") %>%
 			rvest::html_attr("href") %>%
 			base::paste0("https://link.springer.com", .) # une parte do link extraido como o principal
-		authors <- euphytica %>%
+		authors <- page_element %>%
 			rvest::html_nodes(".meta") %>%
 			rvest::html_text2()
-		type <- euphytica %>%
+		type <- page_element %>%
 			rvest::html_nodes(".content-type") %>%
 			rvest::html_text2()
-		description <- euphytica %>%
+		description <- page_element %>%
 			rvest::html_nodes(".snippet") %>%
 			rvest::html_text()
 		
@@ -118,7 +113,7 @@ EupthyticaInformations <- function(link) {
 								   stringsAsFactors = FALSE))
 		
 		#responsible for informing the loop again the correct address of the next page
-		next_link <- euphytica %>%
+		next_link <- page_element %>%
 			rvest::html_nodes(".next") %>%
 			rvest::html_attr("href") %>%
 			base::paste0("https://link.springer.com", .)
@@ -129,20 +124,20 @@ EupthyticaInformations <- function(link) {
 }
 
 #exports data in different formats
-export_dataset <- function(df) {
+export_dataset <- function(df, directory) {
 	
 	base::cat("Exportando dados...\n")
 	base::Sys.sleep(1)
 	
-	utils::write.csv2(x = df, file = "/home/jardel/MEGA/scripts-pessoais/RScripts/wheat_scraping/01.Springer/euphytica/exported_datasets/euphytica_dataset.csv")
-	writexl::write_xlsx(x = df, path = "/home/jardel/MEGA/scripts-pessoais/RScripts/wheat_scraping/01.Springer/euphytica/exported_datasets/euphytica_dataset.xlsx", col_names = TRUE)
-	base::saveRDS(object = df, file = "/home/jardel/MEGA/scripts-pessoais/RScripts/wheat_scraping/01.Springer/euphytica/exported_datasets/euphytica_dataset.RData")
+	utils::write.csv2(x = df, file = paste0(directory, "euphytica.csv"))
+	writexl::write_xlsx(x = df, path = paste0(directory ,"euphytica.xlsx"), col_names = TRUE)
+	base::saveRDS(object = df, file = paste0(directory, "euphytica.RData"))
 }
 
 ################################## Call functions ###################################
 
-euphytica_dataset <- EupthyticaInformations("https://link.springer.com/search?query=wheat&search-within=Journal&facet-journal-id=10681")
-export_dataset(euphytica_dataset) 
+euphytica_dataset <- euphyticaInformations(link = "https://link.springer.com/search?query=wheat&search-within=Journal&facet-journal-id=10681")
+export_dataset(df = euphytica_dataset, directory = "/home/jardel/MEGA/scripts-pessoais/RScripts/wheat_scraping/01.Springer/euphytica/exported_datasets/") 
 
 ################################## End script #######################################
 
