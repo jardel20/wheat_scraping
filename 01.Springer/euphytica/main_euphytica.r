@@ -1,5 +1,5 @@
 #############################################################################
-######################         euphytica Module        ######################
+######################         Euphytica Module        ######################
 ######################                                 ######################
 ###################### Author: Jardel de Moura Fialho  ######################
 ###################### Project: Web Scraping           ######################
@@ -19,7 +19,11 @@ base::rm(list = base::ls())
 
 # installing and loading packages if necessary ####
 if (!base::require(pacman)) utils::install.packages("pacman") #if it doesn't load, install and load
-base::library(pacman, verbose = FALSE); pacman::p_load(dplyr, rvest, progress, beepr)
+base::library(pacman, verbose = FALSE); pacman::p_load(dplyr, 
+                                                       rvest, 
+                                                       progress, 
+                                                       beepr, 
+                                                       downloader, curl)
 
 ################################ Declaring functions ################################
 
@@ -54,7 +58,7 @@ EuphyticaInformations <- function(link) {
   }
   
   #num_pag saves the number of pages that exist on the site
-  num_pag <- rvest::read_html(next_link) %>% # converter um site em um objeto XML
+  num_pag <<- rvest::read_html(next_link) %>% # converter um site em um objeto XML
     rvest::html_nodes(".functions-bar-top .number-of-pages") %>% # extrair os nos relevantes do objeto XML
     rvest::html_text() %>% # extrair os dados marcados
     base::as.integer() # transforma o "character" para "integer"
@@ -76,7 +80,7 @@ EuphyticaInformations <- function(link) {
     
     page_element <- rvest::read_html(x = next_link, encoding = "UTF-8")
     
-    name <- page_element %>%
+    name <<- page_element %>%
       rvest::html_nodes("#results-list .title") %>%
       rvest::html_text()
     name_url <- page_element %>%
@@ -134,10 +138,23 @@ export_dataset <- function(df, directory) {
   base::saveRDS(object = df, file = paste0(directory, "euphytica.RData"))
 }
 
+#download articles #NÃO TERMINADO
+download_articles <- function(links, path) {
+  c <- 1
+  for (i in 1:length(euphytica_dataset$downloads_links_articles)) {
+    
+    curl::curl_download(url = links[c], destfile = path[c], quiet = TRUE) # baixa um a um da lista a ser fornecida
+    Sys.sleep(.5)
+    c <- c+1
+  }
+}
 ################################## Call functions ###################################
 
-euphytica_dataset <- euphyticaInformations(link = "https://link.springer.com/search?query=wheat&search-within=Journal&facet-journal-id=10681")
-export_dataset(df = euphytica_dataset, directory = "/home/jardel/MEGA/scripts-pessoais/RScripts/wheat_scraping/01.Springer/euphytica/exported_datasets/") 
+euphytica_dataset <- EuphyticaInformations(link = "https://link.springer.com/search?query=wheat&search-within=Journal&facet-journal-id=10681")
+export_dataset(df = euphytica_dataset, directory = "/home/jardel/MEGA/scripts-pessoais/RScripts/wheat_scraping/01.Springer/euphytica/exported_datasets/")
+download_articles(links = euphytica_dataset$downloads_links_articles,
+                  path = paste0("/home/jardel/MEGA/scripts-pessoais/RScripts/wheat_scraping/01.Springer/euphytica/downloaded_articles/",
+                                euphytica_dataset$name, ".pdf"))
 
 ################################## End script #######################################
 
